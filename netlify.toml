@@ -1,0 +1,6 @@
+# Netlify konfigurace
+# Publikuje se jen složka public/ — brief (neprustrelne-landing-brief.md)
+# zůstává v repu, ale online se nedostane. Žádný build krok není potřeba.
+
+[build]
+  publish = "public"
