@@ -61,6 +61,41 @@
   }
   .btn:hover { background: var(--accent-hi); transform: translateY(-2px); }
 
+  /* ===== Cenová tlačítka (Early Bird / běžná cena) ===== */
+  .meta-line {
+    font-size: clamp(0.95rem, 1.7vw, 1.1rem);
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.6rem;
+  }
+  .btn-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.9rem; }
+  .btn-price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-decoration: none;
+    border-radius: 3px;
+    padding: 1rem 1.9rem;
+    min-width: 230px;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn-price:hover { transform: translateY(-2px); }
+  .btn-price .price { font-size: 1.45rem; font-weight: 800; line-height: 1.1; }
+  .btn-price .price-note {
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 0.4rem;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-hi); }
+  .btn-primary .price-note { color: rgba(255,255,255,0.88); }
+  .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .btn-secondary .price-note { color: var(--muted); }
+  .vat-note { font-size: 0.82rem; color: var(--muted); }
+
   /* ===== Hero ===== */
   .hero {
     min-height: 92vh;
@@ -302,7 +337,18 @@
       <h1 class="wordmark">Neprůstřelně<span class="dot">.</span></h1>
       <p class="subtitle">Jak budovat resilienci v nesnadné době</p>
       <p class="lede">Resilienci nedefinuje to, že vás nic nemůže srazit na kolena. Definuje ji to, jak rychle se znovu postavíte.</p>
-      <p><a href="#" class="btn">Registrace</a></p>
+      <p class="meta-line">Celodenní workshop. Tři experti, tři pohledy. Maximálně 10 účastníků.</p>
+      <div class="btn-group">
+        <a href="#" class="btn-price btn-primary">
+          <span class="price">9 900 Kč</span>
+          <span class="price-note">Early Bird — do 30. června 2026</span>
+        </a>
+        <a href="#" class="btn-price btn-secondary">
+          <span class="price">12 900 Kč</span>
+          <span class="price-note">Běžná cena</span>
+        </a>
+      </div>
+      <p class="vat-note">Ceny jsou uvedeny bez DPH.</p>
     </div>
   </header>
 
@@ -409,7 +455,17 @@
   <section class="cta">
     <div class="wrap">
       <h2 class="wordmark">Neprůstřelně<span class="dot">.</span></h2>
-      <p><a href="#" class="btn">Registrace zde</a></p>
+      <div class="btn-group" style="justify-content: center; margin-top: 2.4rem;">
+        <a href="#" class="btn-price btn-primary">
+          <span class="price">9 900 Kč</span>
+          <span class="price-note">Early Bird — do 30. června 2026</span>
+        </a>
+        <a href="#" class="btn-price btn-secondary">
+          <span class="price">12 900 Kč</span>
+          <span class="price-note">Běžná cena</span>
+        </a>
+      </div>
+      <p class="vat-note">Ceny jsou uvedeny bez DPH.</p>
     </div>
   </section>
 
