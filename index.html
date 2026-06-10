@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEPRŮSTŘELNĚ — Jak budovat resilienci v nesnadné době</title>
+<meta name="description" content="Celodenní workshop o resilienci. Tři lidé, tři pohledy: osobní bezpečnost, vyjednávání a leadership, a AI bez závislosti.">
+<style>
+  /* ===== Proměnné — paleta a typografie ===== */
+  :root {
+    --bg: #0b0b0d;            /* téměř černé pozadí */
+    --surface: #141417;       /* karty */
+    --surface-2: #1c1c20;     /* jemně světlejší plochy */
+    --line: #2a2a30;          /* linky a okraje */
+    --text: #f4f4f2;          /* hlavní text */
+    --muted: #9a9aa2;          /* sekundární text */
+    --accent: #d62828;         /* červený akcent */
+    --accent-hi: #ef3b3b;      /* světlejší červená pro hover */
+    --maxw: 1100px;
+    --pad: clamp(1.25rem, 5vw, 4rem);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
+
+  /* ===== Wordmark — značka NEPRŮSTŘELNĚ ===== */
+  .wordmark {
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .wordmark .dot { color: var(--accent); }
+
+  /* ===== Tlačítko Registrace ===== */
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 1.05rem 2.4rem;
+    border-radius: 2px;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .btn:hover { background: var(--accent-hi); transform: translateY(-2px); }
+
+  /* ===== Hero ===== */
+  .hero {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 0 5rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  /* jemný červený nádech v rohu pozadí */
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -30%; right: -10%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(214,40,40,0.16) 0%, rgba(214,40,40,0) 60%);
+    pointer-events: none;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .hero h1 {
+    font-size: clamp(2.8rem, 11vw, 7.5rem);
+    margin-bottom: 1.5rem;
+  }
+  .hero .subtitle {
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+    font-style: italic;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+  }
+  .hero .lede {
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    max-width: 38ch;
+    color: var(--text);
+    margin-bottom: 2.8rem;
+  }
+
+  /* ===== Sekce obecně ===== */
+  section { padding: clamp(3.5rem, 8vw, 7rem) 0; }
+  .section-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+    font-weight: 700;
+  }
+
+  /* ===== Úvod ===== */
+  .intro { border-bottom: 1px solid var(--line); }
+  .intro p {
+    font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+    max-width: 30ch;
+    color: var(--text);
+  }
+  .intro p + p {
+    margin-top: 1.6rem;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: var(--muted);
+    max-width: 46ch;
+  }
+  .intro .lead-quote { max-width: 46ch; line-height: 1.5; }
+
+  /* ===== Tři bloky lektorů ===== */
+  .speakers { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .speakers .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 880px) {
+    .speakers .grid { grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
+  }
+  .card {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card .photo {
+    aspect-ratio: 912 / 1136;
+    overflow: hidden;
+    background: #000;
+  }
+  .card .photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    /* editorial černobílý nádech sjednotí tři různé fotky */
+    filter: grayscale(100%) contrast(1.05);
+    transition: filter .4s ease, transform .6s ease;
+  }
+  .card:hover .photo img { filter: grayscale(0%) contrast(1); transform: scale(1.03); }
+  .card .body { padding: 1.8rem 1.6rem 2rem; display: flex; flex-direction: column; flex: 1; }
+  .card .role {
+    font-size: 0.74rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  .card h3 {
+    font-size: 1.55rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+  }
+  .card .topic {
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .card .cred {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .card .desc { font-size: 0.95rem; color: #c9c9cf; }
+  .card .takeaway {
+    margin-top: auto;
+    padding-top: 1.2rem;
+    font-size: 0.92rem;
+    font-style: italic;
+    color: var(--text);
+    border-top: 1px solid var(--line);
+    margin-top: 1.4rem;
+  }
+
+  /* ===== Co si odnesete ===== */
+  .takeaways { border-bottom: 1px solid var(--line); }
+  .takeaways h2 {
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    font-weight: 800;
+    margin-bottom: 2.2rem;
+    max-width: 18ch;
+  }
+  .takeaways ul { list-style: none; max-width: 60ch; }
+  .takeaways li {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 1.1rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: clamp(1rem, 1.8vw, 1.18rem);
+  }
+  .takeaways li:last-child { border-bottom: none; }
+  .takeaways li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.62em;
+    width: 0.7rem; height: 0.7rem;
+    background: var(--accent);
+    border-radius: 1px;
+    transform: rotate(45deg);
+  }
+
+  /* ===== Praktické info ===== */
+  .info { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .info .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+    margin-top: 2.4rem;
+  }
+  @media (min-width: 720px) {
+    .info .grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 3rem; }
+  }
+  .info .item { border-left: 2px solid var(--accent); padding-left: 1.2rem; }
+  .info .item .k {
+    font-size: 0.76rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .info .item .v { font-size: 1.02rem; color: var(--text); }
+  .info .item .v .tbd { color: var(--muted); font-style: italic; }
+
+  /* ===== Závěrečné CTA ===== */
+  .cta {
+    text-align: center;
+    padding: clamp(4rem, 10vw, 8rem) 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::before {
+    content: "";
+    position: absolute;
+    bottom: -40%; left: 50%;
+    transform: translateX(-50%);
+    width: 80vw; height: 60vw;
+    background: radial-gradient(circle, rgba(214,40,40,0.14) 0%, rgba(214,40,40,0) 60%);
+    pointer-events: none;
+  }
+  .cta .wrap { position: relative; z-index: 1; }
+  .cta h2 {
+    font-size: clamp(2.4rem, 9vw, 6rem);
+    margin-bottom: 2.4rem;
+  }
+
+  /* ===== Patička ===== */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2.6rem 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  footer .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer a { color: var(--text); text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+  footer .brand { font-weight: 800; letter-spacing: 0.14em; }
+
+  /* ===== Drobné dolaďovačky animací při scrollu ===== */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="wrap">
+      <h1 class="wordmark">Neprůstřelně<span class="dot">.</span></h1>
+      <p class="subtitle">Jak budovat resilienci v nesnadné době</p>
+      <p class="lede">Resilienci nedefinuje to, že vás nic nemůže srazit na kolena. Definuje ji to, jak rychle se znovu postavíte.</p>
+      <p><a href="#" class="btn">Registrace</a></p>
+    </div>
+  </header>
+
+  <!-- ===== ÚVOD ===== -->
+  <section class="intro">
+    <div class="wrap">
+      <p class="section-label">Proč teď</p>
+      <p class="lead-quote">Známý bonmot říká: dobré časy plodí slabé lidi. Slabí lidé tvoří zlé časy. Zlé časy plodí silné lidi a silní lidé dělají ze zlých časů zase dobré.</p>
+      <p>Dlouho jsme žili v dobrých časech — a možná nejsme tak silní, jak si o sobě myslíme. Možná nás čekají časy nesnadné. A dovednost, která v nich rozhoduje, se jmenuje resilience. Za jeden den vás ji nenaučíme. To ani nejde. Ale tři lidé vás přinutí o ní přemýšlet — každý z jiné strany.</p>
+    </div>
+  </section>
+
+  <!-- ===== TŘI BLOKY ===== -->
+  <section class="speakers">
+    <div class="wrap">
+      <p class="section-label">Tři lidé, tři pohledy</p>
+      <div class="grid">
+
+        <!-- Blok 1 — Jan Řehák -->
+        <article class="card reveal">
+          <div class="photo"><img src="janrehak.jpg" alt="Jan Řehák" loading="lazy"></div>
+          <div class="body">
+            <p class="role">Jak být sám sobě osobním strážcem</p>
+            <h3>Jan Řehák</h3>
+            <p class="cred">Dvacet let v ochranné službě. Bývalý policista, osobní strážce tří amerických velvyslanců. Člověk, který se naučil, že nejlepší konflikt je ten, který nevznikne.</p>
+            <p class="desc">Jeho zásady nejsou pro lidi se sluchátkem v uchu. Jsou pro každého, kdo se chce vyhnout problémům dřív, než začnou. Jak číst situaci. Jak zůstat klidný, když všichni kolem zrychlují. Jak nastavit hranici jednou větou. Kdy odejít — a proč to není prohra.</p>
+            <p class="takeaway">Odnesete si konkrétní postup, ne motivační hesla.</p>
+          </div>
+        </article>
+
+        <!-- Blok 2 — Senta Čermáková -->
+        <article class="card reveal">
+          <div class="photo"><img src="sentacermakova.jpg" alt="Senta Čermáková" loading="lazy"></div>
+          <div class="body">
+            <p class="role">Jak vyjednávat sám se sebou i s ostatními</p>
+            <h3>Senta Čermáková</h3>
+            <p class="cred">Pětadvacet let v Hewlett-Packardu, kde řídila globální zákaznické programy a patřila k nejvýše postaveným českým manažerkám na světě. První žena s titulem Manažer roku. Poté osm let ředitelka inovací v Deloitte. Dnes učí leadership a kritické myšlení na VŠE a na NYU Stern.</p>
+            <p class="desc">Resilience v práci, v týmu a v kariéře. Vyjednávání je těžké, ale dá se naučit. S ostatními i sám se sebou. Jak si udržet svou hodnotu, když AI mění trh práce. Jak jednat s nadřízeným i s podřízeným. Jak si vybrat, na které barikádě stojí za to bojovat — a kterou nechat být. A jak odolnost nestavět jen v sobě, ale i v týmu kolem sebe.</p>
+            <p class="takeaway">Odnesete si nástroje, které použijete na nejbližší poradě.</p>
+          </div>
+        </article>
+
+        <!-- Blok 3 — Miloš Čermák -->
+        <article class="card reveal">
+          <div class="photo"><img src="miloscermak.jpg" alt="Miloš Čermák" loading="lazy"></div>
+          <div class="body">
+            <p class="role">Jak být chytrý s AI i bez ní</p>
+            <h3>Miloš Čermák</h3>
+            <p class="cred">Novinář a lektor. Jeho východisko je střízlivé: AI svět nemění k lepšímu ani k horšímu. Ale mění ho tempem, které jsme si před pár lety ani nedovedli představit.</p>
+            <p class="desc">Jak používat AI tak, aby nás posilovala, ale abychom na ní nebyli závislí. Jak být s AI lepší, ale neztratit své vlastní schopnosti a dovednosti. Proč AI nejlíp a konzistentně pomáhá především těm, kteří její pomoc nutně nepotřebují.</p>
+            <p class="takeaway">Odejdete s novým pohledem na to, jak AI může změnit váš život.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CO SI ODNESETE ===== -->
+  <section class="takeaways">
+    <div class="wrap">
+      <p class="section-label">Z celého dne</p>
+      <h2>Co si odnesete</h2>
+      <ul>
+        <li>Konkrétní postup, jak nepropadnout panice, když věci jdou špatně</li>
+        <li>Tři deeskalační věty, které fungují v devíti případech z deseti</li>
+        <li>Jasno v tom, kdy bojovat a kdy odejít — v práci i mimo ni</li>
+        <li>Návod, jak používat AI a neztratit přitom vlastní hodnotu</li>
+        <li>Definici resilience, kterou si zapamatujete: ne vždy neprůstřelnost, ale rychlost zotavení</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== PRAKTICKÉ INFO ===== -->
+  <section class="info">
+    <div class="wrap">
+      <p class="section-label">Praktické informace</p>
+      <div class="grid">
+        <div class="item">
+          <p class="k">Kdy</p>
+          <p class="v">září 2026, celodenní workshop <span class="tbd">(přesné datum doplníme)</span></p>
+        </div>
+        <div class="item">
+          <p class="k">Kde</p>
+          <p class="v"><span class="tbd">Místo konání doplníme</span></p>
+        </div>
+        <div class="item">
+          <p class="k">Program</p>
+          <p class="v">Registrace od 8:30, workshop 9:00–16:00</p>
+        </div>
+        <div class="item">
+          <p class="k">Formát</p>
+          <p class="v">Tři bloky, každý s přednáškou i praktickým cvičením. Neodejdete jen poučení — odejdete s něčím hotovým.</p>
+        </div>
+        <div class="item">
+          <p class="k">Pro koho</p>
+          <p class="v">Manažery, týmy a každého, kdo chce být v náročné době odolný.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ZÁVĚREČNÉ CTA ===== -->
+  <section class="cta">
+    <div class="wrap">
+      <h2 class="wordmark">Neprůstřelně<span class="dot">.</span></h2>
+      <p><a href="#" class="btn">Registrace zde</a></p>
+    </div>
+  </section>
+
+  <!-- ===== PATIČKA ===== -->
+  <footer>
+    <div class="wrap">
+      <span class="brand">NEPRŮSTŘELNĚ</span>
+      <span>Pořádá <a href="https://inspiruj.se">Inspiruj.se</a> · kontakt doplníme</span>
+    </div>
+  </footer>
+
+  <script>
+    // Jemné odhalení karet při scrollu
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>
